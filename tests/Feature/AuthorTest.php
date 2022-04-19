@@ -2,21 +2,31 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Author;
+use Carbon\Carbon;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthorTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    /** @test */
+    public function a_author_can_be_add()
+    {
+
+        // $this->withoutExceptionHandling();
+
+        $this->post('/authors', [
+            'name' => 'New Author',
+            'dob' => '01/12/1999'
+        ]);
+
+        $author = Author::all();
+        
+        $this->assertCount(1, $author);
+        $this->assertInstanceOf(Carbon::class, $author->first()->dob);
+        $this->assertEquals('1999/01/12', $author->first()->dob->format('Y/m/d'));
     }
 }
