@@ -21,8 +21,12 @@ class BookTest extends TestCase
             'author' => 'New Author',
         ]);
 
-        $response->assertOk();
+        $book = Book::first();
+
+        // $response->assertOk();
         $this->assertCount(1, Book::all());
+
+        $response->assertRedirect($book->path());
     }
 
     /** @test */
@@ -59,12 +63,35 @@ class BookTest extends TestCase
 
         $book = Book::first();
 
-        $response = $this->patch('/books/' . $book->id, [
+        $response = $this->patch($book->path(), [
             'title' => 'New Title',
             'author' => 'New Author'
         ]);
 
         $this->assertEquals('New Title', Book::first()->title);
         $this->assertEquals('New Author', Book::first()->author);
+
+        $response->assertRedirect($book->path());
+    }
+
+    /** @test */
+    public function a_book_can_be_delete()
+    {
+        $this->withoutExceptionHandling();
+        
+        $this->post('/books', [
+            'title' => 'New Title',
+            'author' => 'New Author'
+        ]);
+
+        $this->assertCount(1, Book::all());
+
+        $book = Book::first();
+
+        $response = $this->delete($book->path());
+
+        $this->assertCount(0, Book::all());
+
+        $response->assertRedirect('/books');
     }
 }
