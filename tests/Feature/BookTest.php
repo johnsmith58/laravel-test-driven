@@ -14,7 +14,6 @@ class BookTest extends TestCase
     /** @test */
     public function a_book_can_be_added()
     {
-
         $this->withoutExceptionHandling();
 
         $response = $this->post('/books', [
@@ -29,8 +28,6 @@ class BookTest extends TestCase
     /** @test */
     public function a_title_is_required()
     {
-        // $this->withoutExceptionHandling();
-
         $response = $this->post('/books', [
             'title' => '',
             'author' => 'New Author',
@@ -42,8 +39,6 @@ class BookTest extends TestCase
     /** @test */
     public function a_author_is_required()
     {
-        // $this->withoutExceptionHandling();
-
         $response = $this->post('/books', [
             'title' => 'New Title',
             'author' => '',
