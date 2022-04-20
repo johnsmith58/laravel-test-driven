@@ -8,15 +8,14 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class AuthorTest extends TestCase
+class AuthorManagementTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
     public function a_author_can_be_add()
     {
-
-        // $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->post('/authors', [
             'name' => 'New Author',
