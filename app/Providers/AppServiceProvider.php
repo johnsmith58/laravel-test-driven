@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\BookService;
+use App\Interfaces\BookInterface;
+use App\Services\BookLocalService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if(app()->environment('local'))
+        {
+            $this->app->bind(BookInterface::class, function(){
+                return new BookService();
+            });
+        }else{
+            $this->app->bind(BookInterface::class, function(){
+                return new BookLocalService();
+            });
+        }
     }
 
     /**

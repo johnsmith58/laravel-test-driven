@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserNotFoundException;
+use Exception;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use App\Repositories\BookRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BookController extends Controller
 {
@@ -31,5 +35,15 @@ class BookController extends Controller
     {
         $book->delete();
         return redirect('/books');
+    }
+
+    public function show($id)
+    {
+        try {
+            $book = (new BookRepository)->getBookById($id);
+        } catch (UserNotFoundException $exception) {
+            return view('errors.404', ['error' => $exception->getMessage()]);
+        }
+        return view('books.show', compact('book'));
     }
 }
